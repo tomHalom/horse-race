@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html lang="he">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Horse questionaire</title>    
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/base.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+	<!-- jQuery library -->
+	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>	
+	<script>		
+		{% for pair in pairs %}
+			imageArray.push("{{pair.path1}}");
+			imageArray.push("{{pair.path2}}");
+		{% endfor %}		
+		preload(imageArray)
+	</script>
+    <style>
+		.h1-question{
+			font-size:48px;
+			white-space:nowrap;
+			font-weight: bold;
+			margin-right: 24px;
+		}
+		.no-close .ui-dialog-title {
+			float:right;
+			width:inherit;
+		}
+		.no-close .ui-dialog-titlebar-close {
+			  display: none;
+			}
+        body {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+        blockquote {
+            margin-bottom: 10px;
+            border-left-color: #bbb;
+        }
+        form {
+            margin-top: 10px;
+        }
+        form label {
+          width: 90px;
+          display: inline-block;
+        }
+        .form-signin input[type="text"] {
+            font-size: 16px;
+            height: auto;
+            margin-bottom: 15px;
+            padding: 7px 9px;
+        }
+        .row {
+            margin-left: 0px;
+            margin-top: 10px;
+            overflow: scroll;
+        }
+		.my-confirm{
+			width:100px;
+			font-size:x-large;
+			position:relative;
+		}
+		.my-confirm-left{
+			float: left;
+			left:25%;
+		}
+		.my-confirm-right{
+			float: right;
+			right:25%;
+		}
+		.center-img{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-right: -50%;
+			transform: translate(-50%, -50%)			
+		}
+    </style>
+</head>
+<body>
+<div class="navbar-inverse navbar-default navbar-fixed-top">
+    <div class="navbar-inner">		
+		<img src="images\icon.jpg" style="float:right; width:54px;height:54px;" />
+		<b><a class="brand" href="#" style="font-size:35px; float:right; margin-right:10px; color:white;">שאלון סוסים</a></b>
+    </div>
+</div>
+
+<div dir="rtl" id="dialog-confirmPractice" title="...בחר את התשובה" style="display:none;">
+  <p><span dir="rtl" class="ui-icon ui-icon-alert" style="margin:12px 12px 20px 12px;"></span>האם הסוסים מאותו גזע?</p>
+</div>
+
+<div dir="rtl" id="dialog-confirmExp" title="...בחר את התשובה" style="display:none;">
+  <p><span dir="rtl" class="ui-icon ui-icon-alert" style="margin:12px 12px 20px 12px;"></span>האם הסוסים מאותו גזע?</p>
+</div>
+
+<div id="guidlinesId" style="display:none;" class="container">
+	<img src="images\Guidlines.png" class="img-thumbnail" alt="Guidlines" align="right"> 
+	<div style="position:relative;">
+		<input type="button" value="התחל באימון" onclick="startPractice();" class="btn btn-primary" style="position:absolute; right:550px;top:480px;"></input>
+	</div>
+</div>
+
+<div id="guidlines2Id" style="display:none;" class="container">
+	<img src="images\Finish_practice_message.png" class="img-thumbnail" alt="Guidlines" align="right"> 
+	<div style="position:relative;">
+		<input type="button" value="התחל בניסוי" onclick="getDataAndstartExp();" class="btn btn-primary" style="position:absolute; right:550px;top:480px;"></input>
+	</div>
+</div>
+
+<div id="guidlines3Id" style="display:none;" class="container">
+	<img src="images\Finish_message.png" class="img-thumbnail" alt="Guidlines" align="right"> 
+</div>
+
+<div id="practiceId" style="display:none;" class="container-fluid center-img">
+	<img src="images\practice\pair_0\horse0.png" class="" alt="horse">
+</div>
+
+<div id="isTheSamePractiveId" style="display:none;" class="container-fluid center-img">
+	<h1 class="h1-question" dir="rtl">האם שני הסוסים מאותו הגזע?</h1>
+	</br></br></br></br></br></br></br></br></br></br></br></br>
+	<button type="button" class="btn btn-primary my-confirm my-confirm-left" onclick="$('#isTheSamePractiveId').hide();startPractice();">כן</button>
+	<button type="button" class="btn btn-primary my-confirm my-confirm-right" onclick="$('#isTheSamePractiveId').hide();startPractice();">לא</button>
+</div>
+<div id="isTheSameId" style="display:none;" class="container-fluid center-img">
+	<h1 class="h1-question" dir="rtl">האם שני הסוסים מאותו הגזע?</h1>
+	</br></br></br></br></br></br></br></br></br></br></br></br>
+	<button type="button" class="btn btn-primary my-confirm my-confirm-left" onclick="answer(true);">כן</button>
+	<button type="button" class="btn btn-primary my-confirm my-confirm-right" onclick="answer(false);">לא</button>
+</div>
+
+<div class="container">
+	<form id="formId" class="form-horizontal" role="form" style="margin-top:70px;">
+	  <div class="form-group">
+		<div class="col-md-offset-4 col-sm-4">
+		  <input type="text" class="form-control" id="userId" placeholder="Enter name">
+		</div>
+		<label class="control-label col-sm-2" for="userId">:שם משתמש</label>    
+	  </div>
+	  <div class="form-group">
+		<div class="col-md-offset-4 col-sm-4"> 
+		  <input type="password" class="form-control" id="pwdId" placeholder="Enter password">
+		</div>
+		<label class="control-label col-sm-2" for="pwdId">:סיסמא</label>		
+	  </div>
+	  <div id="InvalidUserId" class="alert alert-danger col-md-offset-4 col-sm-4" style="display:none;">
+		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" style="float:right;"></span>	  
+		<strong dir="rtl" style="float:right; margin-right:7px;">שם המשתמש והסיסמה שהזנת אינן תואמות.</strong>			
+	  </div>
+	  <div class="form-group"> 
+		<div class="col-md-offset-7 col-sm-2">
+		  <input type="button" value="התחבר" onclick="checkUser();" class="btn btn-default"></input>
+		</div>
+	  </div>
+	</form>
+	
+	<form id="formDetailsId" class="form-horizontal" role="form" style="margin-top:70px;display:none;">
+	  <div class="form-group"  id="nameFormGroup">
+		<div class="col-md-offset-4 col-sm-4">
+		  <input type="text" class="form-control" id="testedNameId" required>
+		</div>
+		<label dir="rtl" class="control-label col-sm-2" for="testedNameId">שם הנבדק(באנגלית):</label>    
+	  </div>
+	  <div class="form-group" id="ageFormGroup">
+		<div class="col-md-offset-4 col-sm-4"> 
+		  <input type="number" class="form-control" id="testedAgeId" required>
+		</div>
+		<label class="control-label col-sm-2" for="testedAgeId">:גיל</label>
+	  </div>
+	  <div class="form-group">
+		<div class="col-md-offset-4 col-sm-4"> 
+		  <input type="number" class="form-control" id="testedExpId">
+		</div>
+		<label dir="rtl" class="control-label col-sm-2" for="testedExpId">שנות נסיון עם סוסים(אם אין נסיון יש להשאיר ריק):</label>
+	  </div>
+	  <div class="form-group"> 
+		<div class="col-md-offset-7 col-sm-2">
+		  <input type="button" value="המשך" onclick="ValidateFields();" class="btn btn-default"></input>
+		</div>
+	  </div>
+	</form>
+</div>
+
+</body>
+</html>
+{% endautoescape %}
