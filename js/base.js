@@ -2,7 +2,7 @@ var signed = false;
 var name;
 var experience = 0;
 var age;
-var pictureShownTime = 2500;
+var pictureShownTime = 1000;
 var practicePath = 'images\\practice\\';
 var expPath = 'images\\exp\\';
 var pairNum = 0;
